@@ -14,10 +14,10 @@ class DataAccessMySQLi extends aDataAccess
     // aDataAccess methods
     public function connectToDB()
     {
-         $this->dbConnection = @new mysqli("localhost","root", "inet2005","sakila");
+         $this->dbConnection = @new mysqli("localhost","root", "inet2005","L5Data");
          if (!$this->dbConnection)
          {
-               die('Could not connect to the Sakila Database: ' .
+               die('Could not connect to the Lab5Data Database: ' .
                         $this->dbConnection->connect_errno);
          }
     }
@@ -27,19 +27,84 @@ class DataAccessMySQLi extends aDataAccess
         $this->dbConnection->close();
     }
 
-    public function selectCustomers($start,$count)
+    public function selectActors($start,$count)
     {
-       $this->result = @$this->dbConnection->query("SELECT * FROM customer LIMIT $start,$count");
+       $this->result = @$this->dbConnection->query("SELECT * FROM Actor LIMIT $start,$count");
        if(!$this->result)
        {
-               die('Could not retrieve records from the Sakila Database: ' .
+               die('Could not retrieve records from the Lab5Data Database: ' .
                        $this->dbConnection->error);
        }
 
     }
-    
 
-    public function fetchCustomers()
+    public function SearchActor($Name)
+    {
+        $this->result = @$this->dbConnection->query("SELECT * FROM Actor WHERE FirstName LIKE '%$Name%' OR LastName LIKE '%$Name%'");
+        if(!$this->result)
+        {
+            die('Could not retrieve records from the Lab5Data Database: ' .
+                $this->dbConnection->error);
+        }
+
+    }
+
+
+    public function SearchUActor($actorId)
+    {
+        $this->result = @$this->dbConnection->query("SELECT * FROM Actor WHERE ActorId =  $actorId");
+        if(!$this->result)
+        {
+            die('Could not retrieve records from the Lab5Data Database: ' .
+                $this->dbConnection->error);
+        }
+
+    }
+
+
+
+
+    public function DeleteActor($ActorId)
+    {
+        $this->result = @$this->dbConnection->query("DELETE FROM Actor WHERE ActorId = $ActorId");
+        if(!$this->result)
+        {
+            die('Could not Delete records from the Lab5Data Database: ' .
+                $this->dbConnection->error);
+        }
+
+
+        else
+        {
+            echo ('Record Deleted');
+        }
+    }
+
+
+
+    public function UpdateActor($UpActor, $first, $last)
+    {
+        $this->result = @$this->dbConnection->query("UPDATE Actor SET (FirstName,LastName) VALUES ($first,$last) WHERE ActorId = $UpActor");
+
+
+        if(!$this->result)
+        {
+            die('Could not Update records from the Lab5Data Database: ' .
+                $this->dbConnection->error);
+        }
+
+
+        else
+        {
+            echo ('Record Deleted');
+        }
+    }
+
+
+
+
+
+    public function fetchActors()
     {
        if(!$this->result)
        {
@@ -49,28 +114,32 @@ class DataAccessMySQLi extends aDataAccess
        return $this->result->fetch_array();
     }
     
-    public function fetchCustomerID($row)
+    public function fetchActorID($row)
     {
-       return $row['customer_id'];
+       return $row['ActorId'];
     }
 
-    public function fetchCustomerFirstName($row)
+    public function fetchActorFirstName($row)
     {
-       return $row['first_name'];
+       return $row['FirstName'];
     }
 
-    public function fetchCustomerLastName($row)
+    public function fetchActorLastName($row)
     {
-       return $row['last_name'];
+       return $row['LastName'];
     }
     
-    public function insertCustomer($firstName,$lastName)
+    public function insertActor($firstName,$lastName)
     {
-       $this->result = @$this->dbConnection->query("INSERT INTO customer(store_id,first_name,last_name,address_id) VALUES(1,'$firstName','$lastName',1);");
+       $this->result = @$this->dbConnection->query("INSERT INTO Actor(ActorId,FirstName,LastName) VALUES(NOT Null,'$firstName','$lastName');");
        
        return $this->dbConnection->affected_rows;
 
     }
+
+
+
+
 }
 
 ?>

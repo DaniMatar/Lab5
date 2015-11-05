@@ -31,11 +31,11 @@ class DataAccessPDOSQLite extends aDataAccess
         $this->dbConnection = null;
     }
 
-    public function selectCustomers($start,$count)
+    public function selectActors($start,$count)
     {
         try
         {
-            $this->stmt = $this->dbConnection->prepare('SELECT * FROM customer LIMIT :start, :count');
+            $this->stmt = $this->dbConnection->prepare('SELECT * FROM Actor LIMIT :start, :count');
             $this->stmt->bindParam(':start', $start, PDO::PARAM_INT);
             $this->stmt->bindParam(':count', $count, PDO::PARAM_INT);
 
@@ -49,7 +49,7 @@ class DataAccessPDOSQLite extends aDataAccess
     }
 
 
-    public function fetchCustomers()
+    public function fetchActors()
     {
         try
         {
@@ -63,28 +63,28 @@ class DataAccessPDOSQLite extends aDataAccess
 
     }
 
-    public function fetchCustomerID($row)
+    public function fetchActorID($row)
     {
-        return $row['customer_id'];
+        return $row['ActorId'];
     }
 
-    public function fetchCustomerFirstName($row)
+    public function fetchActorFirstName($row)
     {
-        return $row['first_name'];
+        return $row['FirstName'];
     }
 
-    public function fetchCustomerLastName($row)
+    public function fetchActorLastName($row)
     {
-        return $row['last_name'];
+        return $row['LastName'];
     }
 
-    public function insertCustomer($firstName,$lastName)
+    public function insertActor($firstName,$lastName)
     {
         try
         {
-            $this->stmt = $this->dbConnection->prepare('INSERT INTO customer(first_name,last_name) VALUES(:firstName, :lastName)');
-            $this->stmt->bindParam(':firstName', $firstName, PDO::PARAM_STR);
-            $this->stmt->bindParam(':lastName', $lastName, PDO::PARAM_STR);
+            $this->stmt = $this->dbConnection->prepare('INSERT INTO Actor(ActorId,FirstName,LastName) VALUES(NOT NULL,:firstName, :lastName)');
+            $this->stmt->bindParam(':FirstName', $firstName, PDO::PARAM_STR);
+            $this->stmt->bindParam(':LastName', $lastName, PDO::PARAM_STR);
 
             $this->stmt->execute();
 
@@ -95,6 +95,77 @@ class DataAccessPDOSQLite extends aDataAccess
             die('Could not insert record into SQLite Database via PDO: ' . $ex->getMessage());
         }
     }
+
+
+    public function UpdateActor($UpActor, $first, $last)
+    {
+        $this->result = @$this->dbConnection->query("UPDATE Actor SET (FirstName,LastName) VALUES ($first,$last) WHERE ActorId = $UpActor");
+
+
+        if(!$this->result)
+        {
+            die('Could not Update records from the Lab5Data Database: ' .
+                $this->dbConnection->error);
+        }
+
+
+        else
+        {
+            echo ('Record Deleted');
+        }
+    }
+
+
+    public function DeleteActor($ActorId)
+    {
+        $this->result = @$this->dbConnection->query("DELETE FROM Actor WHERE ActorId = $ActorId");
+        if(!$this->result)
+        {
+            die('Could not Delete records from the Lab5Data Database: ' .
+                $this->dbConnection->error);
+        }
+
+
+        else
+        {
+            echo ('Record Deleted');
+        }
+    }
+
+
+
+
+    public function SearchUActor($actorId)
+    {
+        $this->result = @$this->dbConnection->query("SELECT * FROM Actor WHERE ActorId =  $actorId");
+        if(!$this->result)
+        {
+            die('Could not retrieve records from the Lab5Data Database: ' .
+                $this->dbConnection->error);
+        }
+
+    }
+
+
+
+    public function SearchActor($Name)
+    {
+        $this->result = @$this->dbConnection->query("SELECT * FROM Actor WHERE FirstName LIKE '%$Name%' OR LastName LIKE '%$Name%'");
+        if(!$this->result)
+        {
+            die('Could not retrieve records from the Lab5Data Database: ' .
+                $this->dbConnection->error);
+        }
+
+    }
+
+
+
+
+
+
+
+
 }
 
 ?>

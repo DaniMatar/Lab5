@@ -15,11 +15,11 @@ and open the template in the editor.
             
             if(!empty($_POST['firstName']) && !empty($_POST['lastName']))
             {
-                require("../Business/Customer.php");
+                require("../Business/Actor.php");
                 
-                $newCustomer = new Customer($_POST['firstName'],$_POST['lastName']);
+                $newActor = new Actor($_POST['firstName'],$_POST['lastName']);
                 
-                $result = $newCustomer->Save();          
+                $result = $newActor->Save();
             }
             else 
             {
@@ -27,6 +27,6 @@ and open the template in the editor.
             }
         ?>
         <h1><?php echo $result; ?></h1>
-        <a href="displayCustomers.php">Back to Display</a>
+        <a href="displayActors.php">Back to Display</a>
     </body>
 </html>

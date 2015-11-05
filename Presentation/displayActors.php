@@ -6,7 +6,7 @@ and open the template in the editor.
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Customers</title>
+        <title>Actors</title>
         <style type="text/css">
             table
             {
@@ -19,34 +19,34 @@ and open the template in the editor.
         </style>
     </head>
     <body>
-        <h1>Current Customers:</h1>
+        <h1>Current Actors:</h1>
         <table>
             <thead>
                 <tr>
-                    <td>Customer ID</td>
+                    <td>Actor ID</td>
                     <td>First Name</td>
                     <td>Last Name</td>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                    require("../Business/Customer.php");
+                    require("../Business/Actor.php");
 
-                    $arrayOfCustomers = Customer::retrieveSome(0,10);
+                    $arrayOfActors = Actor::retrieveSome(0,10);
 
-                    foreach($arrayOfCustomers as $customer):
+                    foreach($arrayOfActors as $Actor):
                         
                     ?>
                         <tr>
-                            <td><?php echo $customer->getID(); ?></td>
-                            <td><?php echo $customer->getFirstName(); ?></td>
-                            <td><?php echo $customer->getLastName(); ?></td>
+                            <td><?php echo $Actor->getID(); ?></td>
+                            <td><?php echo $Actor->getFirstName(); ?></td>
+                            <td><?php echo $Actor->getLastName(); ?></td>
                         </tr>
                     <?php
                     endforeach;
                 ?>
             </tbody>
         </table>
-        <a href="newCustomerForm.html">Add Customer</a>    
+        <a href="AddActorForm.html">Add Actor</a>
     </body>
 </html>
