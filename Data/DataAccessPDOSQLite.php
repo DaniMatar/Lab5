@@ -16,7 +16,7 @@ class DataAccessPDOSQLite extends aDataAccess
     {
         try
         {
-            $this->dbConnection = new PDO("sqlite:/home/inet2005/code/inet2005ins/PHP3Tier/Data/db/mydb.sqlite");
+            $this->dbConnection = new PDO("sqlite:/home/inet2005/PhpstormProjects/w0256244/Lab5/Data/db/sqLiteLab5");
             $this->dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         catch(PDOException $ex)
@@ -53,7 +53,7 @@ class DataAccessPDOSQLite extends aDataAccess
     {
         try
         {
-            $this->result = $this->stmt->fetch(PDO::FETCH_ASSOC);
+            $this->result = $this->stmt-> fetch(PDO::FETCH_ASSOC);
             return $this->result;
         }
         catch(PDOException $ex)
@@ -80,13 +80,42 @@ class DataAccessPDOSQLite extends aDataAccess
 
     public function insertActor($firstName,$lastName)
     {
+
+            try
+            {
+
+                $this->stmt = $this->dbConnection-> prepare('INSERT INTO Actor (FirstName, LastName) VALUES(:firstName, :lastName)');
+                $this->stmt->bindParam(':firstName', $firstName, PDO::PARAM_STR);
+                $this->stmt->bindParam(':lastName', $lastName, PDO::PARAM_STR);
+
+
+                $this->stmt->execute ();
+
+                return $this->stmt->rowCount();
+            }
+            catch(PDOException $ex)
+            {
+                die('Could not insert record into SQLite Database via PDO: ' . $ex->getMessage());
+            }
+
+
+
+    }
+
+
+    public function UpdateActor($UpActor, $first, $last)
+    {
+
         try
         {
-            $this->stmt = $this->dbConnection->prepare('INSERT INTO Actor(ActorId,FirstName,LastName) VALUES(NOT NULL,:firstName, :lastName)');
-            $this->stmt->bindParam(':FirstName', $firstName, PDO::PARAM_STR);
-            $this->stmt->bindParam(':LastName', $lastName, PDO::PARAM_STR);
 
-            $this->stmt->execute();
+            $this->stmt = $this->dbConnection-> prepare('UPDATE Actor SET FirstName =:first ,LastName=:last WHERE ActorId = :UpActor');
+            $this->stmt->bindParam(':UpActor', $UpActor, PDO::PARAM_INT);
+            $this->stmt->bindParam(':first', $first, PDO::PARAM_STR);
+            $this->stmt->bindParam(':last', $last, PDO::PARAM_STR);
+
+
+            $this->stmt->execute ();
 
             return $this->stmt->rowCount();
         }
@@ -94,26 +123,12 @@ class DataAccessPDOSQLite extends aDataAccess
         {
             die('Could not insert record into SQLite Database via PDO: ' . $ex->getMessage());
         }
+
+
+
     }
 
 
-    public function UpdateActor($UpActor, $first, $last)
-    {
-        $this->result = @$this->dbConnection->query("UPDATE Actor SET (FirstName,LastName) VALUES ($first,$last) WHERE ActorId = $UpActor");
-
-
-        if(!$this->result)
-        {
-            die('Could not Update records from the Lab5Data Database: ' .
-                $this->dbConnection->error);
-        }
-
-
-        else
-        {
-            echo ('Record Deleted');
-        }
-    }
 
 
     public function DeleteActor($ActorId)
@@ -137,29 +152,40 @@ class DataAccessPDOSQLite extends aDataAccess
 
     public function SearchUActor($actorId)
     {
-        $this->result = @$this->dbConnection->query("SELECT * FROM Actor WHERE ActorId =  $actorId");
-        if(!$this->result)
+        try
         {
-            die('Could not retrieve records from the Lab5Data Database: ' .
-                $this->dbConnection->error);
+            $this->stmt = $this->dbConnection->prepare("SELECT * FROM Actor WHERE ActorId =  $actorId");
+
+
+            $this->stmt->execute();
         }
+        catch(PDOException $ex)
+        {
+            die('Could not select records from SQLite Database via PDO: ' . $ex->getMessage());
+        }
+
+
 
     }
 
 
 
     public function SearchActor($Name)
+
     {
-        $this->result = @$this->dbConnection->query("SELECT * FROM Actor WHERE FirstName LIKE '%$Name%' OR LastName LIKE '%$Name%'");
-        if(!$this->result)
+        try
         {
-            die('Could not retrieve records from the Lab5Data Database: ' .
-                $this->dbConnection->error);
+            $this->stmt = $this->dbConnection->prepare("SELECT * FROM Actor WHERE FirstName LIKE '%$Name%' OR LastName LIKE '%$Name%'");
+
+
+            $this->stmt->execute();
+        }
+        catch(PDOException $ex)
+        {
+            die('Could not select records from SQLite Database via PDO: ' . $ex->getMessage());
         }
 
     }
-
-
 
 
 

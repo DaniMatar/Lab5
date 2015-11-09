@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -14,27 +14,27 @@ class DataAccessMySQLi extends aDataAccess
     // aDataAccess methods
     public function connectToDB()
     {
-         $this->dbConnection = @new mysqli("localhost","root", "inet2005","L5Data");
-         if (!$this->dbConnection)
-         {
-               die('Could not connect to the Lab5Data Database: ' .
-                        $this->dbConnection->connect_errno);
-         }
+        $this->dbConnection = @new mysqli("localhost","root", "inet2005","L5Data");
+        if (!$this->dbConnection)
+        {
+            die('Could not connect to the Lab5Data Database: ' .
+                $this->dbConnection->connect_errno);
+        }
     }
 
     public function closeDB()
-    {  
+    {
         $this->dbConnection->close();
     }
 
     public function selectActors($start,$count)
     {
-       $this->result = @$this->dbConnection->query("SELECT * FROM Actor LIMIT $start,$count");
-       if(!$this->result)
-       {
-               die('Could not retrieve records from the Lab5Data Database: ' .
-                       $this->dbConnection->error);
-       }
+        $this->result = @$this->dbConnection->query("SELECT * FROM Actor LIMIT $start,$count");
+        if(!$this->result)
+        {
+            die('Could not retrieve records from the Lab5Data Database: ' .
+                $this->dbConnection->error);
+        }
 
     }
 
@@ -82,9 +82,18 @@ class DataAccessMySQLi extends aDataAccess
 
 
 
+
+
+
     public function UpdateActor($UpActor, $first, $last)
     {
-        $this->result = @$this->dbConnection->query("UPDATE Actor SET (FirstName,LastName) VALUES ($first,$last) WHERE ActorId = $UpActor");
+        $this->result = @$this->dbConnection->query("UPDATE Actor SET FirstName = '$first', LastName= '$last' WHERE ActorId =$UpActor");
+
+
+
+
+
+
 
 
         if(!$this->result)
@@ -96,7 +105,7 @@ class DataAccessMySQLi extends aDataAccess
 
         else
         {
-            echo ('Record Deleted');
+            echo ('Record Updated');
         }
     }
 
@@ -104,36 +113,37 @@ class DataAccessMySQLi extends aDataAccess
 
 
 
+
     public function fetchActors()
     {
-       if(!$this->result)
-       {
-               die('No records in the result set: ' .
-                       $this->dbConnection->error);
-       }
-       return $this->result->fetch_array();
+        if(!$this->result)
+        {
+            die('No records in the result set: ' .
+                $this->dbConnection->error);
+        }
+        return $this->result->fetch_array();
     }
-    
+
     public function fetchActorID($row)
     {
-       return $row['ActorId'];
+        return $row['ActorId'];
     }
 
     public function fetchActorFirstName($row)
     {
-       return $row['FirstName'];
+        return $row['FirstName'];
     }
 
     public function fetchActorLastName($row)
     {
-       return $row['LastName'];
+        return $row['LastName'];
     }
-    
+
     public function insertActor($firstName,$lastName)
     {
-       $this->result = @$this->dbConnection->query("INSERT INTO Actor(ActorId,FirstName,LastName) VALUES(NOT Null,'$firstName','$lastName');");
-       
-       return $this->dbConnection->affected_rows;
+        $this->result = @$this->dbConnection->query("INSERT INTO Actor(ActorId,FirstName,LastName) VALUES(NOT Null,'$firstName','$lastName');");
+
+        return $this->dbConnection->affected_rows;
 
     }
 
@@ -143,3 +153,7 @@ class DataAccessMySQLi extends aDataAccess
 }
 
 ?>
+
+
+
+

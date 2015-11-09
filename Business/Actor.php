@@ -8,19 +8,19 @@ class Actor implements iBusinessObject
     private $m_ActorId;
     private $m_firstName;
     private $m_lastName;
-    
-    
+
+
     public function __construct($in_fname,$in_lname)
     {
         $this->m_firstName = $in_fname;
         $this->m_lastName = $in_lname;
     }
-    
+
     public function getID()
     {
         return ($this->m_ActorId);
     }
-    
+
     public function getFirstName()
     {
         return ($this->m_firstName);
@@ -130,7 +130,7 @@ class Actor implements iBusinessObject
         $myDataAccess->connectToDB();
 
         $myDataAccess->selectActors($start,$count);
-        
+
         while($row = $myDataAccess->fetchActors())
         {
             $currentActor = new self($myDataAccess->fetchActorFirstName($row),
@@ -140,10 +140,10 @@ class Actor implements iBusinessObject
         }
 
         $myDataAccess->closeDB();
-        
+
         return $arrayOfActorObjects;
     }
-    
+
     public function save()
     {
         $myDataAccess = aDataAccess::getInstance();
@@ -154,7 +154,7 @@ class Actor implements iBusinessObject
         $myDataAccess->closeDB();
 
         return "$recordsAffected row(s) affected!";
-        
+
     }
 }
 
